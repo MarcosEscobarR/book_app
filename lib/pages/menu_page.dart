@@ -15,6 +15,8 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
       body: Center(child: _menuPages[_currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
+        showUnselectedLabels: true,
+        unselectedItemColor: Colors.grey,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -22,6 +24,8 @@ class _MenuPageState extends State<MenuPage> {
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.library_books), label: "Categorias"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.shopping_cart_rounded), label: "Carrito"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Perfil"),
         ],
         selectedItemColor: Colors.greenAccent[700],

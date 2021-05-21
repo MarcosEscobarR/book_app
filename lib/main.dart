@@ -11,8 +11,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashPage(),
-      // home: LoginPage(),
+      // home: SplashPage(),
+      home: LoginPage(),
     );
   }
   // This widget is the root of your application.

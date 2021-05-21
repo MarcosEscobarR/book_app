@@ -56,7 +56,7 @@ class _LoginForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 35),
-      child: Column(
+      child: ListView(
         children: [
           Text(
             "¡Bienvenido!",
@@ -89,8 +89,9 @@ class _LoginForm extends StatelessWidget {
             height: 20,
           ),
           Container(
-              width: 250,
+              width: MediaQuery.of(context).size.width * 0.4,
               child: ClipRRect(
+              
                   borderRadius: BorderRadius.circular(10),
                   child:
                       Image(image: AssetImage('assets/GoogleSignUpDark.png')))),
