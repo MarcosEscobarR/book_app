@@ -11,7 +11,9 @@ class AppbarSearcher extends StatelessWidget {
       color: Colors.white,
       child: Row(
         children: [
-          Icon(Icons.menu),
+          InkWell(
+              onTap: () => Scaffold.of(context).openDrawer(),
+              child: Icon(Icons.menu)),
           SizedBox(
             width: 10,
           ),

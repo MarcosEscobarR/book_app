@@ -29,12 +29,12 @@ class LoginPage extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: size.height * 0.4,
+          top: size.height * 0.38,
           child: Container(
             padding: EdgeInsets.only(top: 25),
             child: _LoginForm(),
             width: size.width,
-            height: size.height * 0.6,
+            height: size.height * 0.62,
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -57,6 +57,7 @@ class _LoginForm extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 35),
       child: ListView(
+        physics: BouncingScrollPhysics(),
         children: [
           Text(
             "¡Bienvenido!",
@@ -88,11 +89,10 @@ class _LoginForm extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
-          Container(
-              width: MediaQuery.of(context).size.width * 0.4,
-              child: ClipRRect(
-              
-                  borderRadius: BorderRadius.circular(10),
+          ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                  height: 50,
                   child:
                       Image(image: AssetImage('assets/GoogleSignUpDark.png')))),
           SizedBox(

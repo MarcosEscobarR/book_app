@@ -1,30 +1,31 @@
+import 'package:book_app/pages/book_page.dart';
 import 'package:book_app/widgets/book.dart';
+import 'package:book_app/widgets/carousel_page.dart';
 import 'package:book_app/widgets/routes_widgets.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: _SliverMenu());
+    return Scaffold(drawer: _Drawer(), body: _SliverMenu());
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Container(),
+    );
   }
 }
 
 class _SliverMenu extends StatelessWidget {
   final items = [
+    Container(height: 200, child: _PhraseCarousel()),
     SizedBox(
       height: 20,
-    ),
-    Container(
-      padding: EdgeInsets.only(left: 20),
-      child: Text(
-        'Mis Libros',
-        style: (TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-      ),
-    ),
-    Container(
-      child: Divider(
-        indent: 13,
-      ),
     ),
     _SavedBooks(),
     SizedBox(
@@ -48,14 +49,20 @@ class _SliverMenu extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        SliverPersistentHeader(
-            floating: true,
-            delegate: CustomAppbar(
-                child: AppbarSearcher(), maxHeight: 100, minHeight: 80)),
-        SliverList(delegate: SliverChildListDelegate(items))
+    return Stack(
+      children: [
+        CustomScrollView(
+          
+          physics: BouncingScrollPhysics(),
+          slivers: [
+            SliverPersistentHeader(
+            
+                floating: true,
+                delegate: CustomAppbar(
+                    child: AppbarSearcher(), maxHeight: 100, minHeight: 80)),
+            SliverList(delegate: SliverChildListDelegate(items))
+          ],
+        ),
       ],
     );
   }
@@ -134,7 +141,7 @@ class _CategorySlider extends StatelessWidget {
     ];
     return Container(
       width: double.infinity,
-      height: 600,
+      height: 550,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -165,7 +172,7 @@ class _CategorySlider extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     itemCount: items.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
+                        childAspectRatio: 1.3, crossAxisCount: 2),
                     itemBuilder: (context, i) {
                       return items[i];
                     })),
@@ -179,9 +186,31 @@ class _CategorySlider extends StatelessWidget {
 class _SavedBooks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      child: _SavedBook(),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 20),
+          child: Text(
+            'Mis Libros',
+            style: (TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+          ),
+        ),
+        Container(
+          child: Divider(
+            indent: 13,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 10),
+          height: 250,
+          child: _SavedBook(),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            // color: Colors.greenAccent.withOpacity(0.1),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -239,27 +268,32 @@ class _Book extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            height: 150,
-            child: Image.asset(imagePath),
-          ),
-          Container(
-            width: 80,
-            child: Text(
-              title,
-              overflow: TextOverflow.clip,
-              style: TextStyle(fontWeight: FontWeight.bold),
+    return InkWell(
+      onTap: () => Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) => BookPage())),
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              height: 150,
+              child: Image.asset(imagePath),
             ),
-          ),
-          Text(author),
-          Row(
-            children: List.generate(rating, (index) => Start(size: 10)),
-          )
-        ],
+            Container(
+              width: 80,
+              child: Text(
+                title,
+                overflow: TextOverflow.clip,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+            Text(author),
+            Spacer(),
+            Row(
+              children: List.generate(rating, (index) => Star(size: 15)),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -269,18 +303,97 @@ class _AddBook extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 80),
-      child: Container(
-        margin: EdgeInsets.only(right: 10),
-        width: 100,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            border: Border.all(
-                style: BorderStyle.solid, color: Colors.grey, width: 3)),
-        child: Icon(
-          Icons.add,
-          size: 30,
-        ),
+        padding: const EdgeInsets.only(bottom: 80, right: 10),
+        child: Container(
+          width: 100,
+          child: DottedBorder(
+              color: Colors.grey,
+              strokeWidth: 2,
+              child: Center(child: Icon(Icons.add))),
+        ));
+  }
+}
+
+class _PhraseCarousel extends StatelessWidget {
+  final List<Widget> phrases = [
+    _Phrase(
+      phrase: 'Hola que tal',
+      author: 'fulano1',
+      color: Colors.green.withOpacity(0.4),
+    ),
+    _Phrase(
+      phrase: 'Hola que tal',
+      author: 'fulano2',
+      color: Colors.blueGrey[700].withOpacity(0.7),
+    ),
+    _Phrase(
+      phrase: 'Hola que tal',
+      author: 'fulano3',
+      color: Colors.red[700].withOpacity(0.7),
+    ),
+    _Phrase(
+      phrase: 'Hola que tal',
+      author: 'fulano4',
+      color: Colors.yellow[700].withOpacity(0.7),
+    ),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return CarouselPage(
+      primaryColor: Colors.greenAccent,
+      secondaryColor: Colors.grey,
+      primaryBullet: 10,
+      secondaryBullet: 10,
+      slides: phrases,
+    );
+  }
+}
+
+class _Phrase extends StatelessWidget {
+  final Color color;
+  final String phrase;
+  final String author;
+
+  const _Phrase(
+      {Key key,
+      @required this.color,
+      @required this.phrase,
+      @required this.author})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Text(
+              phrase,
+              style: TextStyle(
+                  fontFamily: 'Playfair Display',
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontStyle: FontStyle.italic),
+            ),
+          ),
+          Positioned(
+            top: 120,
+            left: MediaQuery.of(context).size.width - 100,
+            child: Text(
+              author,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
